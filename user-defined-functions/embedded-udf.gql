@@ -1,0 +1,29 @@
+"""
+A UDF that returns an embedded object
+"""
+
+"""
+CreateFunction({
+  name: "sample_obj",
+  body: Query(Lambda([], {
+    time: Time("now"),
+    sample: true
+  }))
+})
+"""
+
+type SampleObj @embedded {
+  time: Time!
+  sample: Boolean!
+}
+
+type Query {
+  sampleObj: SampleObj! @resolver(name: "sample_obj")
+}
+
+query {
+  sampleObj {
+    time
+    sample
+  }
+}

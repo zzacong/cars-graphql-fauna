@@ -1,0 +1,24 @@
+"""
+A User can own a Car, 
+while a Car can be owned by a single User.
+"""
+
+type User {
+  name: String!
+  car: Car
+}
+
+type Car {
+  plate: String!
+  owner: User
+}
+
+"""
+In the database, a single collection is predictably chosen 
+to store relational data. If the Car collection is selected, 
+its owner field contains a reference the associated 
+User document while there is no car field in the User documents. 
+A unique index is created on the Car collection with the 
+owner field as a single term to enforce the low cardinality 
+constraint.
+"""

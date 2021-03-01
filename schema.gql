@@ -1,0 +1,13 @@
+type User {
+  name: String!
+  salary: Int!
+  cars: [Car!] @relation
+}
+
+type Car {
+  brand: String!
+  model: String!
+  plate: String!
+  manufactured: Date!
+  owner: User!
+}

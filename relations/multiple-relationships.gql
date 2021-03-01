@@ -1,0 +1,10 @@
+type User {
+  name: String!
+  owns: Car! @relation(name: "car_owner")
+}
+
+type Car {
+  plate: String!
+  owner: User! @relation(name: "car_owner")
+  driver: User!
+}

@@ -1,0 +1,58 @@
+"""
+A UDF that returns a database page
+"""
+
+"""
+CreateCollection({
+  name: "users"
+})
+
+CreateIndex({
+  name: "vip_users",
+  source: Collection("users"),
+  terms: [{ field: [ "data", "vip" ] }]
+})
+
+CreateFunction({
+  name: "vip_users",
+  body: Query(Lambda(["size", "after", "before"],
+    Let(
+      {
+        match: Match(Index("vip_users"), true),
+        page: If(
+          Equals(Var("before"), null),
+          If(
+            Equals(Var("after"), null),
+              Paginate(Var("match"), { size: Var("size") }),
+              Paginate(Var("match"), { size: Var("size"), after: Var("after") })
+          ),
+          Paginate(Var("match"), { size: Var("size"), before: Var("before") }),
+        )
+      },
+      Map(Var("page"), Lambda("ref", Get(Var("ref"))))
+    )
+  ))
+})
+"""
+
+type User @collection(name: "users") {
+  username: String!
+  vip: Boolean!
+}
+
+type Query {
+  vips: [User!] @resolver(name: "vip_users", paginated: true)
+}
+
+query {
+  vips(
+    _size: 2
+    _cursor: "2DOB2DRyMjM1MTcwOTY5MDA0NTQwNDIzgWV1c2Vyc4FnY2xhc3Nlc4CAgIA="
+  ) {
+    data {
+      username
+    }
+    after
+    before
+  }
+}

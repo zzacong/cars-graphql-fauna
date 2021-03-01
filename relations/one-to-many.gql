@@ -1,0 +1,24 @@
+"""
+A User can have many Cars, while a Car can be associated with a single User.
+"""
+
+type User {
+  name: String!
+  cars: [Car!] @relation
+}
+
+type Car {
+  plate: String!
+  owner: User!
+}
+
+"""
+In the database, the collection with the non-array field 
+is used to store relational data. In this case, 
+the owner field in the Car documents contain a reference 
+to the associated User document. 
+A non-unique index is created on the Car collection with 
+the owner field as a single term to allow the 
+GraphQL API to read all Cars associated with a given User. 
+There is no cars field in the User documents.
+"""

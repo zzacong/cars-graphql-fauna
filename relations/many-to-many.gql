@@ -1,0 +1,26 @@
+"""
+A User can drive many Cars, 
+while a Car can be driven by many Users.
+"""
+
+type User {
+  name: String!
+  drives: [Car!] @relation
+}
+
+type Car {
+  plate: String!
+  drivers: [User!] @relation
+}
+
+"""
+In the database, neither relational fields exist in the 
+User or Car documents. Instead, an associative collection 
+is created to store references to each side of the relationship. 
+Three indexes are created on the associative collection, 
+one with the User reference as a term, the other with 
+the Car reference as a term, and one with both the User 
+and Car references as terms. The created indexes are used 
+by the GraphQL API to read the associated documents, 
+depending on which side of the relationship is queried.
+"""

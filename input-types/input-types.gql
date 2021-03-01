@@ -1,0 +1,27 @@
+input ActiveUserInput {
+  username: String!
+  timestamp: Time!
+}
+
+"""
+
+"""
+type User {
+  username: String!
+}
+
+input UserInput {
+  username: String!
+}
+
+"""
+
+"""
+input ActiveUserInput {
+  username: String!
+  timestamp: Time!
+}
+
+type Query {
+  active(user: ActiveUserInput!): Boolean! @resolver
+}

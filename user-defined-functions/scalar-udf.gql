@@ -1,0 +1,20 @@
+"""
+A UDF that returns a scalar type:
+"""
+
+"""
+CreateFunction({
+  name: "say_hello",
+  body: Query(Lambda(["name"],
+    Concat(["Hello ", Var("name")])
+  ))
+})
+"""
+
+type Query {
+  sayHello(name: String!): String! @resolver(name: "say_hello")
+}
+
+query {
+  sayHello(name: "Jane")
+}

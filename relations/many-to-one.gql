@@ -1,0 +1,17 @@
+"""
+A Car can be associated with a single User, 
+while a User is unaware of its association with Cars
+"""
+
+type User {
+  name: String!
+}
+
+type Car {
+  plate: String!
+  owner: User!
+}
+
+"""
+The underlying database components and API behavior are identical to a one-to-many relationship.
+"""

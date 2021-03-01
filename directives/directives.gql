@@ -1,0 +1,84 @@
+# ! @collection
+# Specifies the name of the Fauna collection to use instead of a collection
+# named after the GraphQL type.
+type User @collection(name: "users") {
+  name: String
+}
+
+# ! @embedded
+# Specifies that the type should be embedded within any types referring to this type.
+# Embedded types do not have their own associated collection
+type User {
+  name: String
+  address: Address
+}
+
+type Address @embedded {
+  street: String!
+  city: String!
+  zipCode: String!
+}
+
+mutation {
+  createUser(
+    data: {
+      name: "Mary"
+      address: {
+        street: "Market street, 1023"
+        city: "San Francisco"
+        zipCode: "91044"
+      }
+    }
+  ) {
+    _id
+  }
+}
+
+# ! @index
+# Specifies the name of the index used to collate documents of the current type,
+# instead of a index named after the field’s name.
+type User {
+  name: String
+}
+
+type Query {
+  allUsers: [User!] @index(name: "all_users")
+}
+
+# ! @relation
+# Declares that the current field has a bi-directional relationship with the target type.
+type User {
+  name: String!
+  posts: [Post!] @relation(name: "user_posts")
+  reviews: [Post!] @relation(name: "user_reviews")
+}
+
+type Post {
+  title: String!
+  author: User! @relation(name: "user_posts")
+  reviewers: [User!] @relation(name: "user_reviews")
+}
+
+# ! @resolver
+# Specifies the name of a Fauna user-defined function to use instead of a
+# default field value resolver.
+type Query {
+  sayHello: String! @resolver(name: "say_hello")
+  functionNames: [String!] @resolver(name: "function_names", paginated: true)
+}
+
+query {
+  sayHello
+}
+
+query {
+  functionNames {
+    data
+  }
+}
+
+# ! @unique
+# Specifies the name of a Fauna index that enforces a uniqueness constraint.
+type User {
+  name: String! @unique(index: "unique_username")
+}
